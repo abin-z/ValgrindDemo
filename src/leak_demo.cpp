@@ -4,7 +4,7 @@ void leak_memory01()
 {
   int* data = new int{999};  // 分配内存
   *data = 123;               // 使用内存
-  // delete data;               // 不delete，故意制造内存泄漏
+  // delete data;            // 不delete，故意制造内存泄漏
 }
 
 void leak_memory02()
