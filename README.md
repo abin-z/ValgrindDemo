@@ -33,15 +33,15 @@ cmake --build build
 ```
 构建完成后，会生成两个可执行文件：
 
-leak_demo：包含内存泄漏和 delete 错误
+`leak_demo`：包含内存泄漏和 delete 错误
 
-normal_demo：无内存问题的正确示例
+`normal_demo`：无内存问题的正确示例
 ```bash
 /.../ValgrindDemo/build_output/bin/leak_demo
 /.../ValgrindDemo/build_output/bin/normal_demo
 ```
 ## 🔍 使用 Valgrind 运行程序  
-检测内存问题的示例（leak_demo）
+**检测内存问题的示例（leak_demo）**
 ```bash
 valgrind --leak-check=full ./build_output/bin/leak_demo
 ```
@@ -87,3 +87,38 @@ Done.
 ==102365== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
 [abin@rocky ValgrindDemo]$
 ```
+说明：
+
+存在内存泄漏（没有调用 delete）
+
+错误使用 delete 释放数组（应使用 delete[]）
+
+**正确的内存管理示例（normal_demo）**
+```bash
+valgrind --leak-check=full ./build_output/bin/normal_demo
+```
+预期输出：
+```bash
+
+[abin@rocky ValgrindDemo]$ valgrind --leak-check=full ./build_output/bin/normal_demo
+==103367== Memcheck, a memory error detector
+==103367== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==103367== Using Valgrind-3.23.0 and LibVEX; rerun with -h for copyright info
+==103367== Command: ./build_output/bin/normal_demo
+==103367==
+Running normal demo...
+Memory normal in normal_memory01()...
+Memory normal in normal_memory02()...
+Done.
+==103367==
+==103367== HEAP SUMMARY:
+==103367==     in use at exit: 0 bytes in 0 blocks
+==103367==   total heap usage: 4 allocs, 4 frees, 74,132 bytes allocated
+==103367==
+==103367== All heap blocks were freed -- no leaks are possible
+==103367==
+==103367== For lists of detected and suppressed errors, rerun with: -s
+==103367== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+[abin@rocky ValgrindDemo]$
+```
+说明该程序没有内存泄漏或释放错误。
